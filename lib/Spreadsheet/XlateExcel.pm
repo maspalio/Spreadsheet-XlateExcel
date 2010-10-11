@@ -38,27 +38,29 @@ our $VERSION = '0.01';
 
 This modules triggers a callback subroutine on each row of an Excel spreadsheet.
 
-Wrote this module because I was fed up from writing the same boilerplate code ever when I had to mine spreadsheets for data.
+Wrote this simple module because I was fed up from writing the same boilerplate code ever when I had to mine spreadsheets for data.
 
 Operates on every sheet unless a given sheet is targeted by name, RE inclusion or RE exclusion.
+
+Operates on every column unless targeted by column head name or RE (inclusion).
 
 For example:
 
     use Spreadsheet::XlateExcel;
 
     my $id = Spreadsheet::XlateExcel->new ({ file => 'sheet.xls' });
-    
+
     # rip odd rows of "Sheet2" sheet
-    
+
     my $lol;
-    
+
     $id->xlate ({
-      on_sheet_named  => 'Sheet2',
-      for_each_row_do => sub {
-        my ( $sheet_id, $row, $row_vs ) = @_;
-        
-        push @$lol, $row_vs unless $row % 2;
-      },
+        on_sheet_named  => 'Sheet2',
+        for_each_row_do => sub {
+            my ( $sheet_id, $row, $row_vs ) = @_;
+
+            push @$lol, $row_vs unless $row % 2;
+        },
     });
 
 =head1 METHODS
@@ -91,24 +93,55 @@ sub new {
 
   $self->xlate ({ for_each_row_do => sub { my ( $sheet_id, $row, $row_vs ) = @_ ; ... } })
 
-Applies for_each_row_do sub to each row of each sheet (unless filtered, see below) of the book.
+Applies C<for_each_row_do> sub to each row of each sheet (unless filtered, see below) of the book.
 
-Use on_sheet_named option to target a given book sheet by name.
+Options:
 
-Use on_sheets_like option to target a given book sheet by RE inclusion on name.
+=over
 
-Use on_sheets_unlike option to target a given book sheet by RE exclusion on name.
+=item *
 
-Function gets called for each row, fed with L<Spreadsheet::ParseExcel::Worksheet> ID, row index and arrayref to row values parameters.
+C<on_sheet_named>: targets a given book sheet by name
+
+=item *
+
+C<on_sheets_like>: targets a given book sheet by RE inclusion on name
+
+=item *
+
+C<on_sheets_unlike>: targets a given book sheet by RE exclusion on name
+
+=item *
+
+C<on_columns_heads_names>: targets columns via a listref of strings
+
+=item *
+
+C<on_columns_heads_like>: targets columns via a listref of regular expressions
+
+=back
+
+Callback function gets called for each row, fed with L<Spreadsheet::ParseExcel::Worksheet> ID, row index and arrayref of row values parameters.
+
+Returns self.
 
 =cut
 
 sub xlate {
   my ( $self, $option ) = @_;
   
-  assert_exists $option => 'for_each_row_do';
+  assert_exists  $option => 'for_each_row_do';
+  
+  assert_listref $option->{on_columns_heads_named} if exists $option->{on_columns_heads_named};
+  assert_listref $option->{on_columns_heads_like}  if exists $option->{on_columns_heads_like};
     
-  for my $sheet ( $self->book_id->worksheets ) {
+  my $match = $option->{on_columns_heads_named} ? sub { $_[0] eq $_[1] } : sub { $_[0] =~ $_[1] };
+  my $targets;
+  if ( $option->{on_columns_heads_named} || $option->{on_columns_heads_like} ) {
+    $targets = [ $option->{on_columns_heads_named} ? @{$option->{on_columns_heads_named}} : @{$option->{on_columns_heads_like}} ];
+  }
+
+  XLATE_LOOP : for my $sheet ( $self->book_id->worksheets ) {
     my $sheet_name = $sheet->get_name;
     
     next if $option->{on_sheet_named}   && $sheet_name ne $option->{on_sheet_named};
@@ -118,10 +151,25 @@ sub xlate {
     my ( $row_min, $row_max ) = $sheet->row_range;
     my ( $col_min, $col_max ) = $sheet->col_range;
     
-    for my $row ( $row_min .. $row_max ) {      
-      $option->{for_each_row_do}->( $sheet, $row, [ map { $sheet->get_cell( $row, $_ )->value } $col_min .. $col_max ] );
+    my @rows = $row_min .. $row_max;
+    my @cols = $col_min .. $col_max;
+    
+    if ( $targets ) {
+      my @matching_cols;
+      
+      for my $target ( @$targets ) {
+        push @matching_cols, map { $_->[0] } grep { $match->( $_->[1]->value, $target ) } map { [ $_, $sheet->get_cell ( $row_min, $_ ) ] } @cols;
+      }
+      
+      @cols = @matching_cols;
+    }
+    
+    for my $row ( @rows ) {
+      $option->{for_each_row_do}->( $sheet, $row, [ map { $_ ? $_->value : '' } map { $sheet->get_cell ( $row, $_ ) } @cols ] );
     }
   }
+  
+  $self;
 }
 
 =head2 book_id
@@ -181,6 +229,8 @@ L<http://search.cpan.org/dist/Spreadsheet-XlateExcel/>
 =back
 
 =head1 ACKNOWLEDGEMENTS
+
+To Kawai Takanori, Gabor Szabo and John McNamara, authors of cool L<http://search.cpan.org/dist/Spreadsheet-ParseExcel/> module.
 
 =head1 LICENSE AND COPYRIGHT
 

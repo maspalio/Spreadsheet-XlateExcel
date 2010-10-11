@@ -1,6 +1,16 @@
 Spreadsheet-XlateExcel
 
-Trigger a callback subroutine on each row of an Excel spreadsheet.
+This modules triggers a callback subroutine on each row of an Excel
+spreadsheet.
+
+Wrote this simple module because I was fed up from writing the same
+boilerplate code ever when I had to mine spreadsheets for data.
+
+Operates on every sheet unless a given sheet is targeted by name,
+RE inclusion or RE exclusion.
+
+Operates on every column unless targeted by column head name or
+RE (inclusion).
 
 This is v0.01 or Spreadsheet::XlateExcel module.
 
