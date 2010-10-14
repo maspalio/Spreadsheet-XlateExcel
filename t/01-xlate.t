@@ -3,7 +3,8 @@
 #
 
 use Spreadsheet::XlateExcel;
-use Test::Most;
+use Test::More;
+use Test::Differences;
 
 #
 # Bitch.

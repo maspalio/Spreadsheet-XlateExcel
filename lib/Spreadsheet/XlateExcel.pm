@@ -28,11 +28,11 @@ Spreadsheet::XlateExcel - Trigger a callback subroutine on each row of an Excel 
 
 =head1 VERSION
 
-Version 0.01
+Version 0.02
 
 =cut
 
-our $VERSION = '0.01';
+our $VERSION = '0.02';
 
 =head1 SYNOPSIS
 
@@ -227,6 +227,8 @@ L<http://cpanratings.perl.org/d/Spreadsheet-XlateExcel>
 L<http://search.cpan.org/dist/Spreadsheet-XlateExcel/>
 
 =back
+
+Code is available through github (L<http://github.com/maspalio/Spreadsheet-XlateExcel>).
 
 =head1 ACKNOWLEDGEMENTS
 

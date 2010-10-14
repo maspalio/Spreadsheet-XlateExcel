@@ -12,7 +12,9 @@ RE inclusion or RE exclusion.
 Operates on every column unless targeted by column head name or
 RE (inclusion).
 
-This is v0.01 or Spreadsheet::XlateExcel module.
+Code is hosted on github (http://github.com/maspalio/Spreadsheet-XlateExcel).
+
+This is v0.02 or Spreadsheet::XlateExcel module.
 
 
 INSTALLATION

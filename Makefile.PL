@@ -14,7 +14,8 @@ WriteMakefile(
     PREREQ_PM => {
         'Carp::Assert::More'      => 1.12,
         'Spreadsheet::ParseExcel' => 0.58,
-        'Test::Most'              => 0.23,
+        'Test::Differences'       => 0.5,
+        'Test::More'              => 0.94,
     },
     dist                => { COMPRESS => 'gzip -9f', SUFFIX => 'gz', },
     clean               => { FILES => 'Spreadsheet-XlateExcel-*' },
