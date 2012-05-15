@@ -1,5 +1,8 @@
 Revision history for Spreadsheet-XlateExcel
 
+0.02_01 2012-05-15
+        - Added formatter option to parse sub.
+
 0.02    2010-10-14
         - Depends on Test::More+Test::Differences instead of Test::Most to work around
           a bizarre 2.6.24-27-server/i486-linux-gnu-thread-multi combo (ID 9016456)
