@@ -28,11 +28,11 @@ Spreadsheet::XlateExcel - Trigger a callback subroutine on each row of an Excel 
 
 =head1 VERSION
 
-Version 0.02
+Version 0.02_01
 
 =cut
 
-our $VERSION = '0.02';
+our $VERSION = '0.02_01';
 
 =head1 SYNOPSIS
 
@@ -73,9 +73,12 @@ For example:
 
 =head2 new
 
-  my $id = Spreadsheet::XlateExcel->new ({ file => 'sheet.xls' })
+  my $id = Spreadsheet::XlateExcel->new ({ file => 'sheet.xls' [, formatter => Spreadsheet::ParseExcel::Fmt->new })
 
 Ye constructor.
+
+Optional formatter attribute is a Spreadsheet::ParseExcel formatter instance.
+Refer to L<http://metacpan.org/module/Spreadsheet::ParseExcel#parse-filename-formatter-> for more about such formatters.
 
 =cut
 
@@ -86,7 +89,7 @@ sub new {
   assert_nonblank    $option->{file};
   assert_defined  -f $option->{file}, 'incoming file exists';
   
-  bless { book_id => Spreadsheet::ParseExcel->new->parse ( $option->{file} ) }, $class;
+  bless { book_id => Spreadsheet::ParseExcel->new->parse ( $option->{file}, $option->{formatter} ) }, $class;
 }
 
 =head2 xlate
