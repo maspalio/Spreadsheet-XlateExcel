@@ -1,5 +1,8 @@
 Revision history for Spreadsheet-XlateExcel
 
+0.02_02 2012-05-15
+        - Added META files.
+
 0.02_01 2012-05-15
         - Added formatter option to parse sub.
 

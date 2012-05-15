@@ -28,11 +28,11 @@ Spreadsheet::XlateExcel - Trigger a callback subroutine on each row of an Excel 
 
 =head1 VERSION
 
-Version 0.02_01
+Version 0.02_02
 
 =cut
 
-our $VERSION = '0.02_01';
+our $VERSION = '0.02_02';
 
 =head1 SYNOPSIS
 

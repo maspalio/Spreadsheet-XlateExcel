@@ -11,4 +11,5 @@ t/ZZ-boilerplate.t
 t/ZZ-manifest.t
 t/ZZ-pod_coverage.t
 t/ZZ-pod.t
-META.yml                                 Module meta-data (added by MakeMaker)
+META.yml
+META.json
