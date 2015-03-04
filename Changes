@@ -1,5 +1,9 @@
 Revision history for Spreadsheet-XlateExcel
 
+0.03    2015-03-04
+        - Fixed a documentation typo.
+        - Added a safeguard on /on_columns_heads/ options processing.
+
 0.02_02 2012-05-15
         - Added META files.
 
@@ -14,5 +18,6 @@ Revision history for Spreadsheet-XlateExcel
           http://www.cpantesters.org/cpan/report/4c13c062-d602-11df-8217-a2945457a2d0
         - Added link to github.
           http://github.com/maspalio/Spreadsheet-XlateExcel
+
 0.01    2010-10-11
         - First version, released on an unsuspecting world.
