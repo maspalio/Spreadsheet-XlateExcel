@@ -162,6 +162,17 @@ my @cases = (
     ],
   },
   {
+    name     => 'one sheet thru name, all rows thru values, some columns thru not names',
+    file     => 'sheet-01.xls',
+    option   => { on_sheet_named => 'Sheet1', on_columns_heads_not_named => [ qw( S1A1 S1D1 ) ], for_each_row_do => $all_rows_thru_values },
+    TODO     => 'yet to be coded',
+    expected => [
+      [ qw(      S1B1 S1C1      S1E1 ) ],
+      [ qw(      S1B2 S1C2      S1E2 ) ],
+      [ qw(      S1B3 S1C3      S1E3 ) ],
+    ],
+  },
+  {
     name     => 'one sheet thru name, all rows thru values, some columns thru names, deranged',
     file     => 'sheet-01.xls',
     option   => { on_sheet_named => 'Sheet1', on_columns_heads_named => [ qw( S1C1 S1B1 S1E1 ) ], for_each_row_do => $all_rows_thru_values },
