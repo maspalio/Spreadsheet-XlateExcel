@@ -95,9 +95,19 @@ sub new {
 
 =head2 xlate
 
+  # either:
   $self->xlate ({ for_each_row_do => sub { my ( $sheet_id, $row, $row_vs ) = @_ ; ... } })
 
-Applies C<for_each_row_do> sub to each row of each sheet (unless filtered, see below) of the book.
+  #or:
+  my $loh = $self->xlate ({ rip_loh => 1 })
+
+If C<for_each_row_do> option is used, applies C<for_each_row_do> sub to each row of each sheet
+(unless filtered, see below) of the book.
+
+Else if <rip_loh> option is used, return LoH of meshed heads and row values.
+
+C<xlate> call is likely to die because of L<Carp::Assert::More> assertions so usage of a module like
+L<Try::Tiny> is advised.
 
 Options:
 
@@ -174,7 +184,7 @@ sub xlate {
 
     my $values = sub {
       my $row = shift;
-      
+
       return map { $_ ? $_->value : '' } map { $sheet->get_cell ( $row, $_ ) } @cols;
     };
 
