@@ -13,6 +13,7 @@ WriteMakefile(
     PL_FILES            => {},
     PREREQ_PM => {
         'Carp::Assert::More'      => 1.12,
+        'List::MoreUtils'         => 0.406,
         'Spreadsheet::ParseExcel' => 0.58,
         'Test::Differences'       => 0.5,
         'Test::More'              => 0.94,

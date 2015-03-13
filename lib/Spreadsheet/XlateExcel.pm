@@ -9,6 +9,7 @@ package Spreadsheet::XlateExcel;
 #
 
 use Carp::Assert::More;
+use List::MoreUtils qw( mesh );
 use Spreadsheet::ParseExcel;
 
 #
@@ -169,9 +170,21 @@ sub xlate {
       @cols = @matching_cols;
     }
 
+    my @heads;
+
     for my $row ( @rows ) {
       if ( $option->{for_each_row_do} ) {
         $option->{for_each_row_do}->( $sheet, $row, [ map { $_ ? $_->value : '' } map { $sheet->get_cell ( $row, $_ ) } @cols ] );
+      }
+      elsif ( my $sub = $option->{rip_loh} ) {
+        my @values = map { $_ ? $_->value : '' } map { $sheet->get_cell ( $row, $_ ) } @cols;
+
+        unless ( @heads ) {
+          @heads = @values;
+          next;
+        }
+
+        push @$loh, { mesh @heads, @values };
       }
     }
   }

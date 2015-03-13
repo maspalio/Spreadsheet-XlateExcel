@@ -175,7 +175,6 @@ my @cases = (
     name     => 'one sheet, all rows thru values',
     file     => 'sheet-01.xls',
     option   => { on_sheet_named => 'Sheet1', rip_loh => 1 },
-    TODO     => 'yet to be coded',
     expected => [
       { S1A1 => 'S1A2', S1B1 => 'S1B2', S1C1 => 'S1C2', S1D1 => '',     S1E1 => 'S1E2' },
       { S1A1 => 'S1A3', S1B1 => 'S1B3', S1C1 => 'S1C3', S1D1 => 'S1D3', S1E1 => 'S1E3' },
@@ -200,7 +199,7 @@ TODO: for my $case ( @cases ) {
 
   $got = [];
 
-  $id->xlate ( $case->{option} );
+  my $loh = $id->xlate ( $case->{option} );
 
-  eq_or_diff ( $got, $case->{expected}, $case->{name} );
+  eq_or_diff ( ( $loh // $got ), $case->{expected}, $case->{name} );
 }
