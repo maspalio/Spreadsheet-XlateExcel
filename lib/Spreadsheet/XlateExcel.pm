@@ -28,11 +28,11 @@ Spreadsheet::XlateExcel - Trigger a callback subroutine on each row of an Excel 
 
 =head1 VERSION
 
-Version 0.03
+Version 0.03_01
 
 =cut
 
-our $VERSION = '0.03';
+our $VERSION = '0.03_01';
 
 =head1 SYNOPSIS
 
@@ -133,7 +133,7 @@ Returns self.
 sub xlate {
   my ( $self, $option ) = @_;
 
-  assert_exists  $option => 'for_each_row_do';
+  assert_nonzero grep { m/^( for_each_row_do | rip_loh )$/x } keys %$option;
 
   assert_listref $option->{on_columns_heads_named} if exists $option->{on_columns_heads_named};
   assert_listref $option->{on_columns_heads_like}  if exists $option->{on_columns_heads_like};
@@ -144,31 +144,33 @@ sub xlate {
     $targets = [ $option->{on_columns_heads_named} ? @{$option->{on_columns_heads_named}} : @{$option->{on_columns_heads_like}} ];
   }
 
-  XLATE_LOOP : for my $sheet ( $self->book_id->worksheets ) {
-    my $sheet_name = $sheet->get_name;
+  if ( $option->{for_each_row_do} ) {
+    XLATE_LOOP : for my $sheet ( $self->book_id->worksheets ) {
+      my $sheet_name = $sheet->get_name;
 
-    next if $option->{on_sheet_named}   && $sheet_name ne $option->{on_sheet_named};
-    next if $option->{on_sheets_like}   && $sheet_name !~ $option->{on_sheets_like};
-    next if $option->{on_sheets_unlike} && $sheet_name =~ $option->{on_sheets_unlike};
+      next if $option->{on_sheet_named}   && $sheet_name ne $option->{on_sheet_named};
+      next if $option->{on_sheets_like}   && $sheet_name !~ $option->{on_sheets_like};
+      next if $option->{on_sheets_unlike} && $sheet_name =~ $option->{on_sheets_unlike};
 
-    my ( $row_min, $row_max ) = $sheet->row_range;
-    my ( $col_min, $col_max ) = $sheet->col_range;
+      my ( $row_min, $row_max ) = $sheet->row_range;
+      my ( $col_min, $col_max ) = $sheet->col_range;
 
-    my @rows = $row_min .. $row_max;
-    my @cols = $col_min .. $col_max;
+      my @rows = $row_min .. $row_max;
+      my @cols = $col_min .. $col_max;
 
-    if ( $targets ) {
-      my @matching_cols;
+      if ( $targets ) {
+        my @matching_cols;
 
-      for my $target ( @$targets ) {
-        push @matching_cols, map { $_->[0] } grep { $match->( $_->[1]->value, $target ) } grep { defined $_->[1] } map { [ $_, $sheet->get_cell ( $row_min, $_ ) ] } @cols;
+        for my $target ( @$targets ) {
+          push @matching_cols, map { $_->[0] } grep { $match->( $_->[1]->value, $target ) } grep { defined $_->[1] } map { [ $_, $sheet->get_cell ( $row_min, $_ ) ] } @cols;
+        }
+
+        @cols = @matching_cols;
       }
 
-      @cols = @matching_cols;
-    }
-
-    for my $row ( @rows ) {
-      $option->{for_each_row_do}->( $sheet, $row, [ map { $_ ? $_->value : '' } map { $sheet->get_cell ( $row, $_ ) } @cols ] );
+      for my $row ( @rows ) {
+        $option->{for_each_row_do}->( $sheet, $row, [ map { $_ ? $_->value : '' } map { $sheet->get_cell ( $row, $_ ) } @cols ] );
+      }
     }
   }
 

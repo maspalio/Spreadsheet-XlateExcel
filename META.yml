@@ -22,4 +22,4 @@ requires:
   Spreadsheet::ParseExcel: 0.58
   Test::Differences: 0.5
   Test::More: 0.94
-version: 0.03
+version: 0.03_01

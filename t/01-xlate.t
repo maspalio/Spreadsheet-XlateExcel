@@ -171,6 +171,16 @@ my @cases = (
       [ qw(      S1C3 S1B3      S1E3 ) ],
     ],
   },
+  {
+    name     => 'one sheet, all rows thru values',
+    file     => 'sheet-01.xls',
+    option   => { on_sheet_named => 'Sheet1', rip_loh => 1 },
+    TODO     => 'yet to be coded',
+    expected => [
+      { S1A1 => 'S1A2', S1B1 => 'S1B2', S1C1 => 'S1C2', S1D1 => '',     S1E1 => 'S1E2' },
+      { S1A1 => 'S1A3', S1B1 => 'S1B3', S1C1 => 'S1C3', S1D1 => 'S1D3', S1E1 => 'S1E3' },
+    ],
+  },
 );
 
 #
