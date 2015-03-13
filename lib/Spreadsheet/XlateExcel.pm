@@ -89,7 +89,7 @@ sub new {
   assert_nonblank    $option->{file};
   assert_defined  -f $option->{file}, 'incoming file exists';
 
-  bless { book_id => Spreadsheet::ParseExcel->new->parse ( $option->{file}, $option->{formatter} ) }, $class;
+  return bless { book_id => Spreadsheet::ParseExcel->new->parse ( $option->{file}, $option->{formatter} ) }, $class;
 }
 
 =head2 xlate
@@ -174,7 +174,7 @@ sub xlate {
     }
   }
 
-  $self;
+  return $self;
 }
 
 =head2 book_id
@@ -188,7 +188,7 @@ Accessor to L<Spreadsheet::ParseExcel::Workbook> instance ID.
 sub book_id {
   my ( $self ) = @_;
 
-  $self->{book_id};
+  return $self->{book_id};
 }
 
 #
