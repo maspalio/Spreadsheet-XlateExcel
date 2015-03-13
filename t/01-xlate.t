@@ -35,7 +35,6 @@ my @cases = (
       [ qw( S2A3 S2B3 S2C3                ) ],
       [ qw( S2A4 S2B4 S2C4                ) ],
       [ qw( S2A5 S2B5 S2C5                ) ],
-
     ],
   },
   {
@@ -176,10 +175,10 @@ plan tests => scalar @cases;
 
 for my $case ( @cases ) {
   my $id = Spreadsheet::XlateExcel->new ({ file => "t/01-xlate/$case->{file}" });
-  
+
   $got = [];
-  
+
   $id->xlate ( $case->{option} );
-  
+
   eq_or_diff ( $got, $case->{expected}, $case->{name} );
 }
