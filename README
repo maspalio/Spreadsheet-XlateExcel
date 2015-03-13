@@ -14,7 +14,7 @@ RE (inclusion).
 
 Code is hosted on github (http://github.com/maspalio/Spreadsheet-XlateExcel).
 
-This is v0.02_02 or Spreadsheet::XlateExcel module.
+This is v0.03 or Spreadsheet::XlateExcel module.
 
 
 INSTALLATION
@@ -57,4 +57,3 @@ under the terms of either: the GNU General Public License as published
 by the Free Software Foundation; or the Artistic License.
 
 See http://dev.perl.org/licenses/ for more information.
-
