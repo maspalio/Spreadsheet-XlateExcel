@@ -172,12 +172,18 @@ sub xlate {
 
     my @heads;
 
+    my $values = sub {
+      my $row = shift;
+      
+      return map { $_ ? $_->value : '' } map { $sheet->get_cell ( $row, $_ ) } @cols;
+    };
+
     for my $row ( @rows ) {
       if ( $option->{for_each_row_do} ) {
-        $option->{for_each_row_do}->( $sheet, $row, [ map { $_ ? $_->value : '' } map { $sheet->get_cell ( $row, $_ ) } @cols ] );
+        $option->{for_each_row_do}->( $sheet, $row, [ $values->( $row ) ] );
       }
       elsif ( my $sub = $option->{rip_loh} ) {
-        my @values = map { $_ ? $_->value : '' } map { $sheet->get_cell ( $row, $_ ) } @cols;
+        my @values = $values->( $row );
 
         unless ( @heads ) {
           @heads = @values;
