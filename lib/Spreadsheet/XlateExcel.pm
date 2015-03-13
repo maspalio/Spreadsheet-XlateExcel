@@ -152,7 +152,7 @@ sub xlate {
 
   my ( $match, $targets );
   if ( $option->{on_columns_heads_named} || $option->{on_columns_heads_like} ) {
-    $match   = $option->{on_columns_heads_named} ? sub { $_[0] eq $_[1] } : sub { $_[0] =~ $_[1] };
+    $match   =   $option->{on_columns_heads_named} ? sub { $_[0] eq $_[1] }               : sub { $_[0] =~ $_[1] };
     $targets = [ $option->{on_columns_heads_named} ? @{$option->{on_columns_heads_named}} : @{$option->{on_columns_heads_like}} ];
   }
 
