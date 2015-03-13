@@ -214,5 +214,5 @@ TODO: for my $case ( @cases ) {
 
   my $loh = $id->xlate ( $case->{option} );
 
-  eq_or_diff ( ( $loh // $got ), $case->{expected}, $case->{name} );
+  eq_or_diff ( ( $loh || $got ), $case->{expected}, $case->{name} );
 }
