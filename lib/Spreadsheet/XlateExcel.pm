@@ -100,6 +100,7 @@ sub new {
 
   #or:
   my $loh = $self->xlate ({ rip_loh => 1 })
+  my $loh = $self->xlate ({ rip_loh => sub { my ( $sheet_id, $row, $row_vs ) = @_ ; return $skip_row } })
 
 If C<for_each_row_do> option is used, applies C<for_each_row_do> sub to each row of each sheet
 (unless filtered, see below) of the book.
@@ -155,6 +156,11 @@ sub xlate {
     $targets = [ $option->{on_columns_heads_named} ? @{$option->{on_columns_heads_named}} : @{$option->{on_columns_heads_like}} ];
   }
 
+  my $rip_loh = $option->{rip_loh};
+  unless ( ref $rip_loh eq 'CODE' ) {
+    $rip_loh = sub { return 0 };
+  }
+
   my $loh;
 
   XLATE_LOOP : for my $sheet ( $self->book_id->worksheets ) {
@@ -192,7 +198,7 @@ sub xlate {
       if ( $option->{for_each_row_do} ) {
         $option->{for_each_row_do}->( $sheet, $row, [ $values->( $row ) ] );
       }
-      elsif ( my $sub = $option->{rip_loh} ) {
+      elsif ( $rip_loh ) {
         my @values = $values->( $row );
 
         unless ( @heads ) {
@@ -200,7 +206,9 @@ sub xlate {
           next;
         }
 
-        push @$loh, { mesh @heads, @values };
+        unless ( $rip_loh->( $sheet, $row, \@values ) ) {
+          push @$loh, { mesh @heads, @values };
+        }
       }
     }
   }
@@ -272,7 +280,7 @@ To Kawai Takanori, Gabor Szabo and John McNamara, authors of cool L<http://searc
 
 =head1 LICENSE AND COPYRIGHT
 
-Copyright 2010 Xavier Caron.
+Copyright 2010-2015 Xavier Caron.
 
 This program is free software; you can redistribute it and/or modify it
 under the terms of either: the GNU General Public License as published
