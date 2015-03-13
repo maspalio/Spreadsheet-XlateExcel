@@ -126,7 +126,7 @@ C<on_columns_heads_like>: targets columns via a listref of regular expressions
 
 Callback function gets called for each row, fed with L<Spreadsheet::ParseExcel::Worksheet> ID, row index and arrayref of row values parameters.
 
-Returns self.
+Returns LoH if C<rip_loh> option is used, else undef.
 
 =cut
 
@@ -143,6 +143,8 @@ sub xlate {
   if ( $option->{on_columns_heads_named} || $option->{on_columns_heads_like} ) {
     $targets = [ $option->{on_columns_heads_named} ? @{$option->{on_columns_heads_named}} : @{$option->{on_columns_heads_like}} ];
   }
+
+  my $loh;
 
   XLATE_LOOP : for my $sheet ( $self->book_id->worksheets ) {
     my $sheet_name = $sheet->get_name;
@@ -174,7 +176,7 @@ sub xlate {
     }
   }
 
-  return $self;
+  return $loh;
 }
 
 =head2 book_id
