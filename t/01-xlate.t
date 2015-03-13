@@ -172,9 +172,22 @@ my @cases = (
     ],
   },
   {
-    name     => 'one sheet, all rows thru values',
+    name     => 'rip LoH, all sheets, all rows thru values',
     file     => 'sheet-01.xls',
-    option   => { on_sheet_named => 'Sheet1', rip_loh => 1 },
+    option   => { rip_loh => 1 },
+    expected => [
+      { S1A1 => 'S1A2', S1B1 => 'S1B2', S1C1 => 'S1C2', S1D1 => '',     S1E1 => 'S1E2' },
+      { S1A1 => 'S1A3', S1B1 => 'S1B3', S1C1 => 'S1C3', S1D1 => 'S1D3', S1E1 => 'S1E3' },
+      { S2A1 => 'S2A2', S2B1 => 'S2B2', S2C1 => 'S2C2'                                 },
+      { S2A1 => 'S2A3', S2B1 => 'S2B3', S2C1 => 'S2C3'                                 },
+      { S2A1 => 'S2A4', S2B1 => 'S2B4', S2C1 => 'S2C4'                                 },
+      { S2A1 => 'S2A5', S2B1 => 'S2B5', S2C1 => 'S2C5'                                 },
+    ],
+  },
+  {
+    name     => 'rip LoH, one sheet, all rows thru values',
+    file     => 'sheet-01.xls',
+    option   => { rip_loh => 1, on_sheet_named => 'Sheet1' },
     expected => [
       { S1A1 => 'S1A2', S1B1 => 'S1B2', S1C1 => 'S1C2', S1D1 => '',     S1E1 => 'S1E2' },
       { S1A1 => 'S1A3', S1B1 => 'S1B3', S1C1 => 'S1C3', S1D1 => 'S1D3', S1E1 => 'S1E3' },
