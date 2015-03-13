@@ -173,7 +173,9 @@ plan tests => scalar @cases;
 # Loop.
 #
 
-for my $case ( @cases ) {
+TODO: for my $case ( @cases ) {
+  local $TODO = $case->{TODO};
+
   my $id = Spreadsheet::XlateExcel->new ({ file => "t/01-xlate/$case->{file}" });
 
   $got = [];
