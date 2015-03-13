@@ -122,6 +122,16 @@ my @cases = (
     ],
   },
   {
+    name     => 'one sheet, all rows thru values',
+    file     => 'sheet-01.xls',
+    option   => { on_sheet_named => 'Sheet1', for_each_row_do => $all_rows_thru_values },
+    expected => [
+      [ qw( S1A1 S1B1 S1C1    S1D1  S1E1  ) ],
+      [ qw( S1A2 S1B2 S1C2 ), '',  'S1E2'   ],
+      [ qw( S1A3 S1B3 S1C3    S1D3  S1E3  ) ],
+    ],
+  },
+  {
     name     => 'one sheet thru name, all rows thru values, some columns thru =~res',
     file     => 'sheet-01.xls',
     option   => { on_sheet_named => 'Sheet1', on_columns_heads_like => [ qr/S\d+B1/, qr/S1C\d+/, qr/S1E1/ ], for_each_row_do => $all_rows_thru_values },
