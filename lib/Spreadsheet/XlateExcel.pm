@@ -150,9 +150,9 @@ sub xlate {
   assert_listref $option->{on_columns_heads_named} if exists $option->{on_columns_heads_named};
   assert_listref $option->{on_columns_heads_like}  if exists $option->{on_columns_heads_like};
 
-  my $match = $option->{on_columns_heads_named} ? sub { $_[0] eq $_[1] } : sub { $_[0] =~ $_[1] };
-  my $targets;
+  my ( $match, $targets );
   if ( $option->{on_columns_heads_named} || $option->{on_columns_heads_like} ) {
+    $match   = $option->{on_columns_heads_named} ? sub { $_[0] eq $_[1] } : sub { $_[0] =~ $_[1] };
     $targets = [ $option->{on_columns_heads_named} ? @{$option->{on_columns_heads_named}} : @{$option->{on_columns_heads_like}} ];
   }
 
